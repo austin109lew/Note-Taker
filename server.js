@@ -33,7 +33,6 @@ app.get('/api/notes', (req, res) => {
 });
 
 // Route to handle saving a new note
-// Route to handle saving a new note
 app.post('/api/notes', (req, res) => {
   fs.readFile(path.join(__dirname, 'db.json'), 'utf8', (err, data) => {
     if (err) {
@@ -57,10 +56,7 @@ app.post('/api/notes', (req, res) => {
   });
 });
 
-
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
