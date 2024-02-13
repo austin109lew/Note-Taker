@@ -20,6 +20,9 @@ app.get('/notes', (req, res) => {
   res.sendFile(path.join(__dirname, 'notes.html'));
 });
 
+// Route to serve notes.html
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Route to serve db.json data
 app.get('/api/notes', (req, res) => {
   fs.readFile(path.join(__dirname, 'db.json'), 'utf8', (err, data) => {
