@@ -19,15 +19,15 @@
     <nav class="navbar bg-info">
       <a class="navbar-brand text-light p-3" href="/">Note Taker </a>
       <div class="icons">
-        <button type="button" class="btn btn-outline-light btn-sm save-note">
+        <button type="button" class="btn btn-outline-light btn-sm save-note" style="display: none;">
           <span class="fas fa-save"></span>
           <span>Save Note</span>
         </button>
-        <button type="button" class="btn btn-outline-light btn-sm new-note">
+        <button type="button" class="btn btn-outline-light btn-sm new-note" style="display: none;">
           <span class="fas fa-edit"></span>
           <span>New Note</span>
         </button>
-        <button type="button" class="btn btn-sm btn-outline-danger clear-btn">
+        <button type="button" class="btn btn-sm btn-outline-danger clear-btn" style="display: none;">
           <span class="fas fa-times"></span>
           <span>Clear Form</span>
         </button>
@@ -49,10 +49,67 @@
             type="text"
             />
             <textarea class="note-textarea" placeholder="Note Text"></textarea>
-            </form>
+            <button type="button" class="btn btn-outline-primary save-note" style="display: none;">Save Note</button>
+            <button type="button" class="btn btn-outline-secondary clear-btn" style="display: none;">Clear Form</button>
+          </form>
         </div>
       </div>
     </div>
     <script src="/assets/js/index.js"></script>
+    <script>
+      // JavaScript code to handle interactions
+      document.addEventListener('DOMContentLoaded', function () {
+        const saveNoteButton = document.querySelector('.save-note');
+        const newNoteButton = document.querySelector('.new-note');
+        const clearButton = document.querySelector('.clear-btn');
+        const noteTitleInput = document.querySelector('.note-title');
+        const noteTextarea = document.querySelector('.note-textarea');
+        const listGroup = document.getElementById('list-group');
+        const noteForm = document.querySelector('.note-form');
+
+        function showButtons() {
+          saveNoteButton.style.display = 'inline-block';
+          clearButton.style.display = 'inline-block';
+          newNoteButton.style.display = 'none';
+        }
+
+        function hideButtons() {
+          saveNoteButton.style.display = 'none';
+          clearButton.style.display = 'none';
+          newNoteButton.style.display = 'inline-block';
+        }
+
+        function saveNote() {
+          const title = noteTitleInput.value;
+          const text = noteTextarea.value;
+          if (title.trim() === '' || text.trim() === '') {
+            alert('Please enter both title and text for the note.');
+            return;
+          }
+          const listItem = document.createElement('li');
+          listItem.classList.add('list-group-item');
+          listItem.textContent = title;
+          listGroup.appendChild(listItem);
+          listItem.addEventListener('click', function () {
+            noteTitleInput.value = title;
+            noteTextarea.value = text;
+            showButtons();
+          });
+          noteForm.reset();
+          hideButtons();
+        }
+
+        noteForm.addEventListener('submit', function (event) {
+          event.preventDefault();
+          saveNote();
+        });
+
+        newNoteButton.addEventListener('click', function () {
+          noteTitleInput.value = '';
+          noteTextarea.value = '';
+          hideButtons();
+        });
+      });
+    </script>
   </body>
 </html>
