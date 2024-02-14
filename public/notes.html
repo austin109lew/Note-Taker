@@ -56,60 +56,65 @@
       </div>
     </div>
     <script src="/assets/js/index.js"></script>
-    <script>
-      // JavaScript code to handle interactions
-      document.addEventListener('DOMContentLoaded', function () {
-        const saveNoteButton = document.querySelector('.save-note');
-        const newNoteButton = document.querySelector('.new-note');
-        const clearButton = document.querySelector('.clear-btn');
-        const noteTitleInput = document.querySelector('.note-title');
-        const noteTextarea = document.querySelector('.note-textarea');
-        const listGroup = document.getElementById('list-group');
-        const noteForm = document.querySelector('.note-form');
+      <!-- // JavaScript code to handle interactions -->
+      <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const saveNoteButton = document.querySelector('.save-note');
+    const newNoteButton = document.querySelector('.new-note');
+    const clearButton = document.querySelector('.clear-btn');
+    const noteTitleInput = document.querySelector('.note-title');
+    const noteTextarea = document.querySelector('.note-textarea');
+    const listGroup = document.getElementById('list-group');
+    const noteForm = document.querySelector('.note-form');
 
-        function showButtons() {
-          saveNoteButton.style.display = 'inline-block';
-          clearButton.style.display = 'inline-block';
-          newNoteButton.style.display = 'none';
-        }
+    function showButtons() {
+      saveNoteButton.style.display = 'inline-block';
+      clearButton.style.display = 'inline-block';
+      newNoteButton.style.display = 'none';
+    }
 
-        function hideButtons() {
-          saveNoteButton.style.display = 'none';
-          clearButton.style.display = 'none';
-          newNoteButton.style.display = 'inline-block';
-        }
+    function hideButtons() {
+      saveNoteButton.style.display = 'none';
+      clearButton.style.display = 'none';
+      newNoteButton.style.display = 'inline-block';
+    }
 
-        function saveNote() {
-          const title = noteTitleInput.value;
-          const text = noteTextarea.value;
-          if (title.trim() === '' || text.trim() === '') {
-            alert('Please enter both title and text for the note.');
-            return;
-          }
-          const listItem = document.createElement('li');
-          listItem.classList.add('list-group-item');
-          listItem.textContent = title;
-          listGroup.appendChild(listItem);
-          listItem.addEventListener('click', function () {
-            noteTitleInput.value = title;
-            noteTextarea.value = text;
-            showButtons();
-          });
-          noteForm.reset();
-          hideButtons();
-        }
-
-        noteForm.addEventListener('submit', function (event) {
-          event.preventDefault();
-          saveNote();
-        });
-
-        newNoteButton.addEventListener('click', function () {
-          noteTitleInput.value = '';
-          noteTextarea.value = '';
-          hideButtons();
-        });
+    function saveNote() {
+      const title = noteTitleInput.value;
+      const text = noteTextarea.value;
+      if (title.trim() === '' || text.trim() === '') {
+        alert('Please enter both title and text for the note.');
+        return;
+      }
+      const listItem = document.createElement('li');
+      listItem.classList.add('list-group-item');
+      listItem.textContent = title;
+      listGroup.appendChild(listItem);
+      listItem.addEventListener('click', function () {
+        noteTitleInput.value = title;
+        noteTextarea.value = text;
+        showButtons();
       });
-    </script>
+      noteForm.reset();
+      hideButtons();
+    }
+
+    noteForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      saveNote();
+    });
+
+    noteTitleInput.addEventListener('input', showButtons); // Show buttons when typing in the title field
+    noteTextarea.addEventListener('input', showButtons); // Show buttons when typing in the text field
+
+    newNoteButton.addEventListener('click', function () {
+      noteTitleInput.value = '';
+      noteTextarea.value = '';
+      hideButtons();
+    });
+  });
+</script>
+
+    
   </body>
 </html>
