@@ -58,61 +58,89 @@
     <script src="/assets/js/index.js"></script>
       <!-- // JavaScript code to handle interactions -->
       <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const saveNoteButton = document.querySelector('.save-note');
-    const newNoteButton = document.querySelector('.new-note');
-    const clearButton = document.querySelector('.clear-btn');
-    const noteTitleInput = document.querySelector('.note-title');
-    const noteTextarea = document.querySelector('.note-textarea');
-    const listGroup = document.getElementById('list-group');
-    const noteForm = document.querySelector('.note-form');
+   document.addEventListener('DOMContentLoaded', function () {
+      const saveNoteButton = document.querySelector('.save-note');
+      const newNoteButton = document.querySelector('.new-note');
+      const clearButton = document.querySelector('.clear-btn');
+      const noteTitleInput = document.querySelector('.note-title');
+      const noteTextarea = document.querySelector('.note-textarea');
+      const listGroup = document.getElementById('list-group');
+      const noteForm = document.querySelector('.note-form');
 
-    function showButtons() {
-      saveNoteButton.style.display = 'inline-block';
-      clearButton.style.display = 'inline-block';
-      newNoteButton.style.display = 'none';
-    }
-
-    function hideButtons() {
-      saveNoteButton.style.display = 'none';
-      clearButton.style.display = 'none';
-      newNoteButton.style.display = 'inline-block';
-    }
-
-    function saveNote() {
-      const title = noteTitleInput.value;
-      const text = noteTextarea.value;
-      if (title.trim() === '' || text.trim() === '') {
-        alert('Please enter both title and text for the note.');
-        return;
+      function showButtons() {
+        saveNoteButton.style.display = 'inline-block';
+        clearButton.style.display = 'inline-block';
+        newNoteButton.style.display = 'none';
       }
-      const listItem = document.createElement('li');
-      listItem.classList.add('list-group-item');
-      listItem.textContent = title;
-      listGroup.appendChild(listItem);
-      listItem.addEventListener('click', function () {
-        noteTitleInput.value = title;
-        noteTextarea.value = text;
-        showButtons();
+
+      function hideButtons() {
+        saveNoteButton.style.display = 'none';
+        clearButton.style.display = 'none';
+        newNoteButton.style.display = 'inline-block';
+      }
+
+      function saveNote() {
+        const title = noteTitleInput.value.trim();
+        const text = noteTextarea.value.trim();
+        
+        // Check if both title and text are provided
+        if (title === '' || text === '') {
+          alert('Please enter both title and text for the note.');
+          return;
+        }
+
+        // Send the new note data to the server to save
+        fetch('/api/notes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ title, text })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to save note.');
+          }
+          return response.json();
+        })
+        .then(savedNote => {
+          // Add the saved note to the list
+          const listItem = document.createElement('li');
+          listItem.classList.add('list-group-item');
+          listItem.textContent = savedNote.title;
+          listGroup.appendChild(listItem);
+          
+          // When clicking on the saved note, populate the fields with its data
+          listItem.addEventListener('click', function () {
+            noteTitleInput.value = savedNote.title;
+            noteTextarea.value = savedNote.text;
+            showButtons();
+          });
+          
+          // Reset the form and hide the buttons
+          noteForm.reset();
+          hideButtons();
+        })
+        .catch(error => {
+          console.error('Error saving note:', error);
+          alert('Failed to save note. Please try again.');
+        });
+      }
+
+      noteForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        saveNote();
       });
-      noteForm.reset();
-      hideButtons();
-    }
 
-    noteForm.addEventListener('submit', function (event) {
-      event.preventDefault();
-      saveNote();
+      noteTitleInput.addEventListener('input', showButtons); // Show buttons when typing in the title field
+      noteTextarea.addEventListener('input', showButtons); // Show buttons when typing in the text field
+
+      newNoteButton.addEventListener('click', function () {
+        noteTitleInput.value = '';
+        noteTextarea.value = '';
+        hideButtons();
+      });
     });
-
-    noteTitleInput.addEventListener('input', showButtons); // Show buttons when typing in the title field
-    noteTextarea.addEventListener('input', showButtons); // Show buttons when typing in the text field
-
-    newNoteButton.addEventListener('click', function () {
-      noteTitleInput.value = '';
-      noteTextarea.value = '';
-      hideButtons();
-    });
-  });
 </script>
 
     
