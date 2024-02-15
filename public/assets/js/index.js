@@ -1,4 +1,3 @@
-
 let noteForm;
 let noteTitle;
 let noteText;
@@ -170,15 +169,12 @@ const renderNoteList = async (notes) => {
     noteListItems.push(createLi('No saved Notes', false));
   }
 
-  if (Array.isArray(jsonNotes)) {
-    jsonNotes.forEach((note) => {
-      const li = createLi(note.title);
-      li.dataset.note = JSON.stringify(note);
-      noteListItems.push(li);
-    });
-  } else {
-    console.error('jsonNotes is not an array:', jsonNotes);
-  }
+  jsonNotes.forEach((note) => {
+    const li = createLi(note.title);
+    li.dataset.note = JSON.stringify(note);
+
+    noteListItems.push(li);
+  });
 
   if (window.location.pathname === '/notes') {
     noteListItems.forEach((note) => noteList[0].append(note));
