@@ -37,7 +37,7 @@ app.get('/api/notes', (req, res) => {
 
 // Route to handle saving a new note
 app.post('/api/notes', (req, res) => {
-  fs.readFile(path.join(__dirname, '/db/db.json'), 'utf8', (err, data) => {
+  fs.readFile(path.join(__dirname, 'db.json'), 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: 'Internal server error' });
